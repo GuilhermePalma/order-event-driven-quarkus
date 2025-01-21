@@ -31,7 +31,7 @@ public class OrderEventProducer {
     @Value("${mykafka.topics.order.update}")
     private String UPDATE_ODER_MANY;
 
-    private OperationResultDTO<?> insertOrder(UpsertItemsCommand<Order> event) {
+    public OperationResultDTO<?> insertOrder(UpsertItemsCommand<Order> event) {
         log.info("OrderEventProducer start insertOrder");
         try {
             if (Objects.isNull(event.getPayload())) {
@@ -52,7 +52,7 @@ public class OrderEventProducer {
         }
     }
 
-    private OperationResultDTO<?> updateOrder(UpsertItemsCommand<Order> event) {
+    public OperationResultDTO<?> updateOrder(UpsertItemsCommand<Order> event) {
         log.info("OrderEventProducer start updateOrder");
         try {
             if (Objects.isNull(event.getPayload())) {
