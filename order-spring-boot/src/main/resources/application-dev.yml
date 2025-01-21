@@ -29,9 +29,10 @@ mykafka:
     order:
       insert: INSERT_ODER_MANY
       update: UPDATE_ODER_MANY
-      list: LIST_ODER_MANY
+  timeout:
+    waiting:
+      response: 480
 
-logging.file:
   path: ./home/user
   name: my.log
 

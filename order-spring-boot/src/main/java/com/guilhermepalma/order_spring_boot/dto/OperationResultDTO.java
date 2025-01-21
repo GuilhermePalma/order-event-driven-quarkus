@@ -3,14 +3,18 @@ package com.guilhermepalma.order_spring_boot.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class OperationResultDTO<T> {
+    private String operationIdentifierId;
+    private Set<String> metadata;
+
     private List<T> data;
     private Long total;
     private String errors;
