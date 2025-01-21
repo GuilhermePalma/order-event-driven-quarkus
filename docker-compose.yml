@@ -66,6 +66,16 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
 
+  # Spring Boot Project
+  web-order-spring-boot:
+    build: ./order-spring-boot/
+    image: order-spring-boot:1.0
+    ports:
+      - "8090:8090"
+    depends_on:
+      - postgres
+      - kafka
+
 # Kafka Network (Commun on Zookepper, Kafka, Kafdrop)
 networks:
   broker-kafka:
