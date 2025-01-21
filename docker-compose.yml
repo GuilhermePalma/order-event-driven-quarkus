@@ -71,9 +71,8 @@ services:
     build:
       context: /order-spring-boot
       dockerfile: Dockerfile
-    image: order-spring-boot:1.0
     ports:
-      - "8090:8090"
+      - "8081:8081"
     depends_on:
       - postgres
       - kafka

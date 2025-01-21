@@ -1,8 +1,8 @@
 spring:
   datasource:
-    # url: jdbc:h2:file:./database/dev/backup_data;MODE=MySQL
-    username: admin
-    password: admin
+    url: jdbc:postgresql://order-event-driven-quarkus-postgres-1:5432/db_order-app
+    username: guilherme_user
+    password: 0biy0]Q99y2?
     driverClassName: org.postgresql.Driver
 
   jpa:
@@ -32,5 +32,5 @@ logging.file:
   path: ./home/user
   name: my.log
 
-server.port: 8090
+server.port: 8081
 
