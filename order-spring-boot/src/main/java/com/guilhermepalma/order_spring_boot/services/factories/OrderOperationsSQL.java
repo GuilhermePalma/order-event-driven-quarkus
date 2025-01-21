@@ -7,13 +7,16 @@ import com.guilhermepalma.order_spring_boot.factory.FindInterface;
 import com.guilhermepalma.order_spring_boot.factory.OperationsSQL;
 import com.guilhermepalma.order_spring_boot.model.Order;
 import com.guilhermepalma.order_spring_boot.repository.OrderRepository;
+import com.guilhermepalma.order_spring_boot.type.StatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class OrderOperationsSQL extends OperationsSQL<Order, FindOrderByParametersCommand, OrderRepository> {
@@ -33,41 +36,43 @@ public class OrderOperationsSQL extends OperationsSQL<Order, FindOrderByParamete
     public OperationResultDTO<?> findMany(FindInterface<FindOrderByParametersCommand> command) {
         Pageable page = PageRequest.of(command.getQuery().getPageNumber(), command.getQuery().getPageSize(), Sort.by("id").ascending());
 
-        FindInterface<FindOrderByParametersCommand> overrideCommand = new FindInterface<>() {
+        FindInterface<FindOrderByParametersCommand> overrideCommand = new FindInterface<>(command.getQuery()) {
             @Override
             public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
-                Boolean isDeleted = !Objects.isNull(queryParameters.getIsDeleted()) && queryParameters.getIsDeleted();
+                final boolean isDeleted = !Objects.isNull(queryParameters.getIsDeleted()) && queryParameters.getIsDeleted();
 
                 if (!Util.isEmptyOrNull(queryParameters.getId())) {
                     final Page<Order> pageReturned = repository.findAllByIsDeletedIsAndIdIn(isDeleted, queryParameters.getId(), page);
                     return new OperationResultDTO<>(pageReturned.getContent(), pageReturned.getTotalElements());
                 }
 
-                if (!Util.isEmptyOrNull(queryParameters.getType()) && !Util.isEmptyOrNull(queryParameters.getCustomerName()) && !Util.isEmptyOrNull(queryParameters.getName())) {
+                final Set<String> productName = queryParameters.getName(), customerName = queryParameters.getCustomerName();
+                final Set<StatusType> type = queryParameters.getType();
+                if (!Util.isEmptyOrNull(type) && !Util.isEmptyOrNull(customerName) && !Util.isEmptyOrNull(productName)) {
                     final Page<Order> pageReturned = repository.findAllByIsDeletedIsAndCustomerNameInAndProductInAndStatusIn(isDeleted,
-                            queryParameters.getCustomerName(), queryParameters.getName(), queryParameters.getType(), page);
+                            customerName, productName, type, page);
                     return new OperationResultDTO<>(pageReturned.getContent(), pageReturned.getTotalElements());
                 }
 
-                if (!Util.isEmptyOrNull(queryParameters.getName()) && !Util.isEmptyOrNull(queryParameters.getType())) {
+                if (!Util.isEmptyOrNull(productName) && !Util.isEmptyOrNull(type)) {
                     final Page<Order> pageReturned = repository.findAllByIsDeletedIsAndProductInAndStatusIn(isDeleted,
-                            queryParameters.getName(), queryParameters.getType(), page);
+                            productName, type, page);
                     return new OperationResultDTO<>(pageReturned.getContent(), pageReturned.getTotalElements());
                 }
 
-                if (!Util.isEmptyOrNull(queryParameters.getCustomerName()) && !Util.isEmptyOrNull(queryParameters.getType())) {
+                if (!Util.isEmptyOrNull(customerName) && !Util.isEmptyOrNull(type)) {
                     final Page<Order> pageReturned = repository.findAllByIsDeletedIsAndCustomerNameInAndStatusIn(isDeleted,
-                            queryParameters.getCustomerName(), queryParameters.getType(), page);
+                            customerName, type, page);
                     return new OperationResultDTO<>(pageReturned.getContent(), pageReturned.getTotalElements());
                 }
 
                 final Page<Order> pageReturned;
-                if (!Util.isEmptyOrNull(queryParameters.getName())) {
-                    pageReturned = repository.findAllByIsDeletedIsAndProductIn(isDeleted, queryParameters.getName(), page);
-                } else if (!Util.isEmptyOrNull(queryParameters.getCustomerName())) {
-                    pageReturned = repository.findAllByIsDeletedIsAndCustomerNameIn(isDeleted, queryParameters.getCustomerName(), page);
-                } else if (!Util.isEmptyOrNull(queryParameters.getType())) {
-                    pageReturned = repository.findAllByIsDeletedIsAndStatusIn(isDeleted, queryParameters.getType(), page);
+                if (!Util.isEmptyOrNull(productName)) {
+                    pageReturned = repository.findAllByIsDeletedIsAndProductIn(isDeleted, productName, page);
+                } else if (!Util.isEmptyOrNull(customerName)) {
+                    pageReturned = repository.findAllByIsDeletedIsAndCustomerNameIn(isDeleted, customerName, page);
+                } else if (!Util.isEmptyOrNull(type)) {
+                    pageReturned = repository.findAllByIsDeletedIsAndStatusIn(isDeleted, type, page);
                 } else {
                     pageReturned = repository.findAll(page);
                 }

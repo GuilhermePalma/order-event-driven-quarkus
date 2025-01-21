@@ -15,7 +15,7 @@ public class FindOrderByParametersCommand {
     private final Set<UUID> id;
     private final Set<String> name;
     private final Set<String> customerName;
-    private final List<StatusType> type;
+    private final Set<StatusType> type;
     private final Boolean isDeleted;
 
     private int pageNumber;
