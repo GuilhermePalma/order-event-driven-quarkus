@@ -8,8 +8,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.webjars.NotFoundException;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,7 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
         log.info("Started create one by SQL Operations...");
         try {
             if (Objects.isNull(command) || Objects.isNull(command.getPayload())) {
-                return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
+                return new OperationResultDTO<>(new Exception("Payload can't be null"));
             }
 
             T data = command.getPayload().getFirstOnData();
@@ -51,7 +49,7 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
         log.info("Started create many by SQL Operations...");
         try {
             if (Objects.isNull(command) || Objects.isNull(command.getPayload())) {
-                return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
+                return new OperationResultDTO<>(new Exception("Payload can't be null"));
             }
 
             List<T> data = command.getPayload().getData();
@@ -81,7 +79,7 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
         log.info("Started update one by SQL Operations...");
         try {
             if (Objects.isNull(command) || Objects.isNull(command.getPayload())) {
-                return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
+                return new OperationResultDTO<>(new Exception("Payload can't be null"));
             }
 
             T data = command.getPayload().getFirstOnData();
@@ -104,7 +102,7 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
         log.info("Started update many by SQL Operations...");
         try {
             if (Objects.isNull(command) || Objects.isNull(command.getPayload())) {
-                return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
+                return new OperationResultDTO<>(new Exception("Payload can't be null"));
             }
 
             List<T> data = command.getPayload().getData();
@@ -139,7 +137,7 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
         log.info("Started delete many by SQL Operations...");
         try {
             if (Objects.isNull(command) || Objects.isNull(command.getIds())) {
-                return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
+                return new OperationResultDTO<>(new Exception("Payload can't be null"));
             }
 
             List<UUID> data = command.getIds().getData();

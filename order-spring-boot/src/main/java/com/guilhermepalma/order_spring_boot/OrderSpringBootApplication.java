@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @OpenAPIDefinition(info = @Info(
 		title = "API Spring Boot - Producer, Consumer, Query of Orders",
@@ -15,6 +17,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 		description = "API usada para as Operações Server-Side, usando EventDriven e segregando a Logica do Kafka do Banco de Dados"
 ))
 @SpringBootApplication
+@EnableKafka // Set Kafka in Spring Boot Project
+@EnableAsync // Enable works async
 public class OrderSpringBootApplication {
 
 	public static void main(String[] args) {
