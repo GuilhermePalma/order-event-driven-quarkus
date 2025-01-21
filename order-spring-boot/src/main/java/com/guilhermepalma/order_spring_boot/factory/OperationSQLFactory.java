@@ -1,12 +1,13 @@
 package com.guilhermepalma.order_spring_boot.factory;
 
+import com.guilhermepalma.order_spring_boot.dto.command.FindItemsSQLCommand;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public class OperationSQLFactory<T, U, R extends JpaRepository<T, UUID>> implements OperationsFactory<T, U> {
+public class OperationSQLFactory<T, R extends JpaRepository<T, UUID>> implements OperationsFactory<T> {
     @Override
-    public Operations<T, U> createOperations() {
-        return new OperationsSQL<T, U, R>();
+    public Operations<T> createOperations() {
+        return new OperationsSQL<T, R>();
     }
 }

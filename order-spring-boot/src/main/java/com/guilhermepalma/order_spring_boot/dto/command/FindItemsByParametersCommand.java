@@ -18,4 +18,7 @@ public class FindItemsByParametersCommand<T> {
     private final List<T> type;
     private final Boolean isDeleted;
 
+    private int pageNumber;
+    private int pageSize;
+
 }

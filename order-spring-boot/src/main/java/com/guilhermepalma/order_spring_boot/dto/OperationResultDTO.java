@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 public class OperationResultDTO<T> {
-    private Set<T> data;
+    private List<T> data;
     private Long total;
     private String errors;
     private Long totalErrors;
@@ -20,7 +20,7 @@ public class OperationResultDTO<T> {
      * Instance class with Unique Iten
      */
     public OperationResultDTO(T data) {
-        this.data = Collections.singleton(data);
+        this.data = Collections.singletonList(data);
         this.total = 1L;
     }
 
@@ -28,7 +28,7 @@ public class OperationResultDTO<T> {
      * Instance class with Many Items
      */
     public OperationResultDTO(Collection<T> data, long total) {
-        this.data = new HashSet<>(data);
+        this.data = new ArrayList<>(data);
         this.total = Objects.isNull(total) ? data.size() : total;
     }
 
@@ -36,7 +36,7 @@ public class OperationResultDTO<T> {
      * Instance class with Unique Iten and Erros
      */
     public OperationResultDTO(T data, long total, Set<String> errors) {
-        this.data = Collections.singleton(data);
+        this.data = Collections.singletonList(data);
         this.total = Objects.isNull(total) ? 1L : total;
         if (!Objects.isNull(errors) && !errors.isEmpty()) {
             this.errors = String.join("\n", errors);
@@ -48,7 +48,7 @@ public class OperationResultDTO<T> {
      * Instance class with Many Items
      */
     public OperationResultDTO(Collection<T> data, long total, Set<String> errors) {
-        this.data = new HashSet<>(data);
+        this.data = new ArrayList<>(data);
         this.total = Objects.isNull(total) ? data.size() : total;
         if (!Objects.isNull(errors) && !errors.isEmpty()) {
             this.errors = String.join("\n", errors);

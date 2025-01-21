@@ -5,7 +5,8 @@ import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.FindItemsSQLCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.webjars.NotFoundException;
 
@@ -16,13 +17,10 @@ import java.util.stream.Collectors;
  * Create an Operations by SQL Implementation
  *
  * @param <T> Entity Class
- * @param <U> Entity Type (If there is)
  * @param <R> Repository Class by JPA Repository
  */
 @Log4j2
-public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Operations<T, U> {
-
-    private U type;
+public class OperationsSQL<T, R extends JpaRepository<T, UUID>> implements Operations<T> {
     private R repository;
 
     @Override
@@ -160,25 +158,17 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
     }
 
     @Override
-    public OperationResultDTO<?> findOne(FindItemsSQLCommand<T> command) {
-        return findMany(command);
+    public OperationResultDTO<?> findOne(FindInterface command) {
+        OperationResultDTO<?> many = findMany(command);
+        return Objects.isNull(many) || Objects.isNull(many.getData()) || many.getData().isEmpty()
+                ? new OperationResultDTO<>() : new OperationResultDTO<>(many.getData().get(0));
     }
 
     @Override
-    public OperationResultDTO<?> findMany(FindItemsSQLCommand<T> command) {
+    public OperationResultDTO<?> findMany(FindInterface command) {
         log.info("Started find many by SQL Operations...");
         try {
-            if (Objects.isNull(command)) {
-                return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
-            }
-
-            final Pageable pageable = Objects.isNull(command.getPage())
-                    ? PageRequest.of(0, 10, Sort.by("id").ascending()) : command.getPage();
-            final Example<T> example = command.getExample();
-
-            final Page<T> pageReturned = Objects.isNull(example) ? repository.findAll(pageable) : repository.findAll(example, pageable);
-            return new OperationResultDTO<>(pageReturned.getContent(), pageReturned.getTotalElements());
-
+            return command.findMany();
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {
