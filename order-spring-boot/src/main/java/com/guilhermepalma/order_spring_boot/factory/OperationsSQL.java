@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @param <R> Repository Class by JPA Repository
  */
 @Log4j2
-public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Operations<T, Q> {
+public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Operations<T, Q>{
     private R repository;
 
     @Override

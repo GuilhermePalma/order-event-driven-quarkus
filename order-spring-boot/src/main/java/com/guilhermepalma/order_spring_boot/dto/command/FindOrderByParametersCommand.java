@@ -1,5 +1,6 @@
 package com.guilhermepalma.order_spring_boot.dto.command;
 
+import com.guilhermepalma.order_spring_boot.type.StatusType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,7 +14,8 @@ public class FindOrderByParametersCommand {
 
     private final Set<UUID> id;
     private final Set<String> name;
-    private final List<Object> type;
+    private final Set<String> customerName;
+    private final List<StatusType> type;
     private final Boolean isDeleted;
 
     private int pageNumber;
