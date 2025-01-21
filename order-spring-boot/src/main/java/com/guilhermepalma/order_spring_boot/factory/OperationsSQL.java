@@ -2,7 +2,7 @@ package com.guilhermepalma.order_spring_boot.factory;
 
 import com.guilhermepalma.order_spring_boot.dto.OperationResultDTO;
 import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
-import com.guilhermepalma.order_spring_boot.dto.command.FindItemsSQLCommand;
+import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Example;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @param <R> Repository Class by JPA Repository
  */
 @Log4j2
-public class OperationsSQL<T, R extends JpaRepository<T, UUID>> implements Operations<T> {
+public class OperationsSQL<T, FindItemsByParametersCommand, R extends JpaRepository<T, UUID>> implements Operations<T, FindItemsByParametersCommand> {
     private R repository;
 
     @Override
@@ -158,17 +158,16 @@ public class OperationsSQL<T, R extends JpaRepository<T, UUID>> implements Opera
     }
 
     @Override
-    public OperationResultDTO<?> findOne(FindInterface command) {
+    public OperationResultDTO<?> findOne(FindInterface<FindItemsByParametersCommand> command) {
         OperationResultDTO<?> many = findMany(command);
         return Objects.isNull(many) || Objects.isNull(many.getData()) || many.getData().isEmpty()
                 ? new OperationResultDTO<>() : new OperationResultDTO<>(many.getData().get(0));
     }
 
     @Override
-    public OperationResultDTO<?> findMany(FindInterface command) {
-        log.info("Started find many by SQL Operations...");
+    public OperationResultDTO<?> findMany(FindInterface<FindItemsByParametersCommand> command) {
         try {
-            return command.findMany();
+            return command.executeQuery(command.getQuery());
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {

@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public class OperationSQLFactory<T, R extends JpaRepository<T, UUID>> implements OperationsFactory<T> {
+public class OperationSQLFactory<T, Q, R extends JpaRepository<T, UUID>> implements OperationsFactory<T, Q> {
     @Override
-    public Operations<T> createOperations() {
-        return new OperationsSQL<T, R>();
+    public Operations<T, Q> createOperations() {
+        return new OperationsSQL<T, Q, R>();
     }
 }
