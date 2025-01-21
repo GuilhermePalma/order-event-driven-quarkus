@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://order-event-driven-quarkus-postgres-1:5432/db_order-app
+    url: jdbc:postgresql://localhost:5432/db_order-app
     username: guilherme_user
     password: 0biy0]Q99y2?
     driverClassName: org.postgresql.Driver
@@ -12,13 +12,13 @@ spring:
       ddl-auto: update
 
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: kafka:9092
     producer:
-      bootstrap-servers: 127.0.0.1:9092
+      bootstrap-servers: kafka:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      bootstrap-servers: 127.0.0.1:9092
+      bootstrap-servers: kafka:9092
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       auto-offset-reset: earliest
