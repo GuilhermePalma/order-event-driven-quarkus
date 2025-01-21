@@ -7,5 +7,5 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UpsertItemsCommand<T> {
-    private final PayloadDTO<T> data;
+    private final PayloadDTO<T> payload;
 }

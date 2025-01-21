@@ -12,15 +12,15 @@ import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
  */
 public interface Operations<T, U> {
 
-    OperationResultDTO<?> createOne(UpsertItemsCommand<T> command) throws Exception;
-    OperationResultDTO<?> createMany(UpsertItemsCommand<T> command) throws Exception;
+    OperationResultDTO<?> createOne(UpsertItemsCommand<T> command);
+    OperationResultDTO<?> createMany(UpsertItemsCommand<T> command);
 
-    OperationResultDTO<?> updateOne(UpsertItemsCommand<T> command) throws Exception;
-    OperationResultDTO<?> updateMany(UpsertItemsCommand<T> command) throws Exception;
+    OperationResultDTO<?> updateOne(UpsertItemsCommand<T> command);
+    OperationResultDTO<?> updateMany(UpsertItemsCommand<T> command);
 
     OperationResultDTO<?> deleteOne(DeleteItemsCommand command);
     OperationResultDTO<?> deleteMany(DeleteItemsCommand command);
 
-    OperationResultDTO<?> findOne(FindItemsByParametersCommand<U> command);
-    OperationResultDTO<?> findMany(FindItemsByParametersCommand<U> command);
+    OperationResultDTO<?> findOne(FindItemsByParametersCommand<T> command);
+    OperationResultDTO<?> findMany(FindItemsByParametersCommand<T> command);
 }
