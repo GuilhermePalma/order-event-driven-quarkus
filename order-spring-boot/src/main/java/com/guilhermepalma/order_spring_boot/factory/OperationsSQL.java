@@ -2,7 +2,7 @@ package com.guilhermepalma.order_spring_boot.factory;
 
 import com.guilhermepalma.order_spring_boot.dto.OperationResultDTO;
 import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
-import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
+import com.guilhermepalma.order_spring_boot.dto.command.FindItemsSQLCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.*;
@@ -160,12 +160,12 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
     }
 
     @Override
-    public OperationResultDTO<?> findOne(FindItemsByParametersCommand<T> command) {
+    public OperationResultDTO<?> findOne(FindItemsSQLCommand<T> command) {
         return findMany(command);
     }
 
     @Override
-    public OperationResultDTO<?> findMany(FindItemsByParametersCommand<T> command) {
+    public OperationResultDTO<?> findMany(FindItemsSQLCommand<T> command) {
         log.info("Started find many by SQL Operations...");
         try {
             if (Objects.isNull(command)) {

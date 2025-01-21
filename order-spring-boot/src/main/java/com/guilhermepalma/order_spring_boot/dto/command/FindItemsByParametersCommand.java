@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,7 +13,9 @@ import java.util.UUID;
 @Getter
 public class FindItemsByParametersCommand<T> {
 
-    private Example<T> example;
-    private Pageable page;
+    private final Set<UUID> id;
+    private final Set<String> name;
+    private final List<T> type;
+    private final Boolean isDeleted;
 
 }
