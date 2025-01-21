@@ -54,26 +54,4 @@ public class OrderEventHandler {
         log.info("OrderEventHandler updateOrder finished");
     }
 
-    @KafkaListener(topics = "${mykafka.topics.order.list}", groupId = "group-id", concurrency = "5",
-            topicPartitions = @TopicPartition(topic = "${mykafka.topics.order.insert}", partitions = {"0", "1", "2", "3", "4"}))
-    private void findOrder(ConsumerRecord<String, FindOrderByParametersCommand> query){
-        log.info("OrderEventHandler start findOrder on Topic: [{}] Partition: [{}] Key: [{}]",
-                query.topic(), query.partition(), query.key());
-
-        if (Objects.isNull(query.value())){
-            log.error("Empty Payload on Key: [{}]", query.key());
-            return;
-        }
-
-        orderOperationsSQL.findMany(new FindInterface<>(query.value()) {
-            @Override
-            public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
-                return null;
-            }
-        });
-
-        log.info("OrderEventHandler findOrder finished");
-    }
-
-
 }
