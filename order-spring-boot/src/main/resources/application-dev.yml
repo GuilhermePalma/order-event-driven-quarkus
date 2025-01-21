@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/db_order-app
+    url: jdbc:postgresql://order-event-driven-quarkus-postgres-1:5432/db_order-app
     username: guilherme_user
     password: 0biy0]Q99y2?
     driverClassName: org.postgresql.Driver
