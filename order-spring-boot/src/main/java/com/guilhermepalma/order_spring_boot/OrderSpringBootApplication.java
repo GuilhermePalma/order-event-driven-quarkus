@@ -12,8 +12,8 @@ public class OrderSpringBootApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OrderSpringBootApplication.class, args);
 
-		OperationsFactory<Void> s = new OperationSQLFactory<>();
-		Operations<Void> s1 = s.createOperations();
+		OperationsFactory<Void, Void> s = new OperationSQLFactory<>();
+		Operations<Void, Void> s1 = s.createOperations();
 
 	}
 

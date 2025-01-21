@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @param <R> Repository Class by JPA Repository
  */
 @Log4j2
-public class OperationsSQL<T, R extends JpaRepository<T, UUID>> implements Operations<T> {
+public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Operations<T, Q> {
     private R repository;
 
     @Override
@@ -158,14 +158,14 @@ public class OperationsSQL<T, R extends JpaRepository<T, UUID>> implements Opera
     }
 
     @Override
-    public OperationResultDTO<?> findOne(FindInterface<FindItemsByParametersCommand> command) {
+    public OperationResultDTO<?> findOne(FindInterface<Q> command) {
         OperationResultDTO<?> many = findMany(command);
         return Objects.isNull(many) || Objects.isNull(many.getData()) || many.getData().isEmpty()
                 ? new OperationResultDTO<>() : new OperationResultDTO<>(many.getData().get(0));
     }
 
     @Override
-    public OperationResultDTO<?> findMany(FindInterface<FindItemsByParametersCommand> command) {
+    public OperationResultDTO<?> findMany(FindInterface<Q> command) {
         try {
             return command.executeQuery(command.getQuery());
         } catch (Exception ex) {
