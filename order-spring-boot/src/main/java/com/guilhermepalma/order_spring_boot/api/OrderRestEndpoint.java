@@ -49,7 +49,7 @@ public class OrderRestEndpoint {
     @Operation(summary = "Update Orders values", description = "Used only for Update Items")
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Orders Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationResultDTO.class))))
-    @PostMapping(value = "api/v1/order", produces = "application/json", consumes = "application/json")
+    @PutMapping(value = "api/v1/order", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationResultDTO<?>> updateOrder(@RequestBody PayloadDTO<Order> orderPayload) {
         UpsertItemsCommand<Order> command = UpsertItemsCommand.<Order>builder().payload(orderPayload).build();
         return new ResponseEntity<>(orderService.updateOrder(command), HttpStatus.OK);
