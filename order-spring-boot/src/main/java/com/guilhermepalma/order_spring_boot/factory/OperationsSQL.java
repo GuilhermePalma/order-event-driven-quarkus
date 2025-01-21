@@ -4,13 +4,8 @@ import com.guilhermepalma.order_spring_boot.dto.OperationResultDTO;
 import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
-import jdk.jshell.execution.Util;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.webjars.NotFoundException;
 
@@ -19,6 +14,7 @@ import java.util.stream.Collectors;
 
 /**
  * Create an Operations by SQL Implementation
+ *
  * @param <T> Entity Class
  * @param <U> Entity Type (If there is)
  * @param <R> Repository Class by JPA Repository
@@ -74,7 +70,7 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
                 return item;
             }).filter(item -> !Objects.isNull(item)).toList();
 
-            return new OperationResultDTO<>(repository.saveAll(validData), errors);
+            return new OperationResultDTO<>(repository.saveAll(validData), validData.size(), errors);
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {
@@ -93,7 +89,7 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
             T data = command.getPayload().getFirstOnData();
             if (Objects.isNull(data)) {
                 return new OperationResultDTO<>(new IllegalArgumentException("Empty Payload"));
-            } else if (fetchDatabseItem(data).isEmpty()){
+            } else if (fetchDatabseItem(data).isEmpty()) {
                 return new OperationResultDTO<>(new IllegalArgumentException("Item there isn't on Database"));
             }
 
@@ -127,7 +123,7 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
                 return item;
             }).filter(item -> !Objects.isNull(item)).toList();
 
-            return new OperationResultDTO<>(repository.saveAll(validData), errors);
+            return new OperationResultDTO<>(repository.saveAll(validData), validData.size(), errors);
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {
@@ -155,7 +151,7 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
 
             repository.deleteAllById(data);
             return new OperationResultDTO<>(String.format("Deleted IDs:\n%s", data.stream().map(UUID::toString)
-                    .collect(Collectors.joining("\n")) ));
+                    .collect(Collectors.joining("\n"))));
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {
@@ -176,13 +172,13 @@ public class OperationsSQL<T, U, R extends JpaRepository<T, UUID>> implements Op
                 return new OperationResultDTO<>(new NotFoundException("Payload can't be null"));
             }
 
-            final Pageable pageable = Objects.isNull(command.getPage()) ? null : command.getPage();
+            final Pageable pageable = Objects.isNull(command.getPage())
+                    ? PageRequest.of(0, 10, Sort.by("id").ascending()) : command.getPage();
             final Example<T> example = command.getExample();
-            if (Objects.isNull(example)) {
-                return new OperationResultDTO<>(repository.findAll(pageable));
-            } else {
-                return new OperationResultDTO<>(repository.findAll(example, pageable));
-            }
+
+            final Page<T> pageReturned = Objects.isNull(example) ? repository.findAll(pageable) : repository.findAll(example, pageable);
+            return new OperationResultDTO<>(pageReturned.getContent(), pageReturned.getTotalElements());
+
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {

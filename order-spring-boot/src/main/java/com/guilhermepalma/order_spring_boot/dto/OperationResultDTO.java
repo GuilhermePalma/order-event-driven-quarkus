@@ -21,23 +21,23 @@ public class OperationResultDTO<T> {
      */
     public OperationResultDTO(T data) {
         this.data = Collections.singleton(data);
-        this.total = Objects.isNull(total) ? null : 1L;
+        this.total = 1L;
     }
 
     /**
      * Instance class with Many Items
      */
-    public OperationResultDTO(Collection<T> data) {
+    public OperationResultDTO(Collection<T> data, long total) {
         this.data = new HashSet<>(data);
-        this.total = Objects.isNull(total) ? null : 1L;
+        this.total = Objects.isNull(total) ? data.size() : total;
     }
 
     /**
      * Instance class with Unique Iten and Erros
      */
-    public OperationResultDTO(T data, Set<String> errors) {
+    public OperationResultDTO(T data, long total, Set<String> errors) {
         this.data = Collections.singleton(data);
-        this.total = Objects.isNull(total) ? null : 1L;
+        this.total = Objects.isNull(total) ? 1L : total;
         if (!Objects.isNull(errors) && !errors.isEmpty()) {
             this.errors = String.join("\n", errors);
             this.totalErrors = (long) errors.size();
@@ -47,9 +47,9 @@ public class OperationResultDTO<T> {
     /**
      * Instance class with Many Items
      */
-    public OperationResultDTO(Collection<T> data, Set<String> errors) {
+    public OperationResultDTO(Collection<T> data, long total, Set<String> errors) {
         this.data = new HashSet<>(data);
-        this.total = Objects.isNull(total) ? null : 1L;
+        this.total = Objects.isNull(total) ? data.size() : total;
         if (!Objects.isNull(errors) && !errors.isEmpty()) {
             this.errors = String.join("\n", errors);
             this.totalErrors = (long) errors.size();
