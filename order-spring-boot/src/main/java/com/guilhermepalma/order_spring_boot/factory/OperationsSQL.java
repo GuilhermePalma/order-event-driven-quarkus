@@ -5,12 +5,15 @@ import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,15 +114,25 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
 
             Set<String> errors = Collections.synchronizedSet(new HashSet<>());
             List<T> validData = data.stream().map(item -> {
-                if (fetchDatabseItem(item).isEmpty()) {
-                    errors.add(String.format("Item there isn't on Database. Item: [%s]", item.toString()));
+                try {
+                    Optional<T> optional = fetchDatabseItem(item);
+                    if (optional.isEmpty()) {
+                        errors.add(String.format("Item there isn't on Database. Item: [%s]", item.toString()));
+                        return null;
+                    } else {
+                        BeanUtils.copyProperties(item, optional.get());
+                        return item;
+                    }
+                } catch (Exception ex) {
+                    log.error("exception", ex);
+                    errors.add(ex.getLocalizedMessage());
                     return null;
                 }
-                return item;
             }).filter(item -> !Objects.isNull(item)).toList();
 
             return new OperationResultDTO<>(repository.saveAll(validData), validData.size(), errors);
         } catch (Exception ex) {
+            log.error("exception", ex);
             return new OperationResultDTO<>(ex);
         } finally {
             log.info("Finished update many by SQL Operations...");
@@ -172,7 +185,9 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
         }
     }
 
-    private Optional<T> fetchDatabseItem(T data) {
-        return repository.findOne(Example.of(data, ExampleMatcher.matchingAll().withMatcher("id", ExampleMatcher.GenericPropertyMatchers.exact())));
+    private Optional<T> fetchDatabseItem(T data) throws NoSuchFieldException, IllegalAccessException {
+        Field field = data.getClass().getDeclaredField("id");
+        field.setAccessible(true);
+        return repository.findById((UUID) field.get(data));
     }
 }
