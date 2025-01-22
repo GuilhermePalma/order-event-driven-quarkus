@@ -12,6 +12,7 @@ import com.guilhermepalma.order_spring_boot.factory.Operations;
 import com.guilhermepalma.order_spring_boot.model.Order;
 import com.guilhermepalma.order_spring_boot.repository.OrderRepository;
 import com.guilhermepalma.order_spring_boot.services.producer.OrderEventProducer;
+import com.guilhermepalma.order_spring_boot.services.query.OrderQueryHandler;
 import com.guilhermepalma.order_spring_boot.type.StatusType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,9 +35,9 @@ public class OrderRestEndpoint {
     private final Operations<Order, Void> producer;
     private final Operations<Order, FindOrderByParametersCommand> queryHandler;
 
-    public OrderRestEndpoint(OperationKafkaFactory<Order> producer, OperationSQLFactory<Order, FindOrderByParametersCommand, OrderRepository> query) {
-        this.producer = producer.createOperations();
-        this.queryHandler = query.createOperations();
+    public OrderRestEndpoint(OrderEventProducer producer, OrderQueryHandler query) {
+        this.queryHandler = query;
+        this.producer = producer;
     }
 
     @Operation(summary = "Create Orders values", description = "Used only for Register new Items")
