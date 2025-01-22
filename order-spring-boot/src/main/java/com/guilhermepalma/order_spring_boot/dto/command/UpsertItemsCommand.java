@@ -10,4 +10,5 @@ import lombok.*;
 @ToString
 public class UpsertItemsCommand<T> {
     private PayloadDTO<T> payload;
+    private String identifier;
 }
