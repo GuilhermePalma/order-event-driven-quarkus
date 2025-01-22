@@ -6,7 +6,7 @@ import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.FindOrderByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import com.guilhermepalma.order_spring_boot.factory.FindInterface;
-import com.guilhermepalma.order_spring_boot.factory.OperationsSQL;
+import com.guilhermepalma.order_spring_boot.factory.sql.OperationsSQL;
 import com.guilhermepalma.order_spring_boot.model.Order;
 import com.guilhermepalma.order_spring_boot.repository.OrderRepository;
 import com.guilhermepalma.order_spring_boot.services.factories.OrderOperationsSQL;

@@ -1,10 +1,6 @@
 package com.guilhermepalma.order_spring_boot;
 
-import com.guilhermepalma.order_spring_boot.factory.OperationSQLFactory;
-import com.guilhermepalma.order_spring_boot.factory.Operations;
-import com.guilhermepalma.order_spring_boot.factory.OperationsFactory;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

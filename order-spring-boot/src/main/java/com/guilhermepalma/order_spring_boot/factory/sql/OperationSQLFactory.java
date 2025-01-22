@@ -1,7 +1,7 @@
-package com.guilhermepalma.order_spring_boot.factory;
+package com.guilhermepalma.order_spring_boot.factory.sql;
 
-import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
-import com.guilhermepalma.order_spring_boot.dto.command.FindItemsSQLCommand;
+import com.guilhermepalma.order_spring_boot.factory.Operations;
+import com.guilhermepalma.order_spring_boot.factory.OperationsFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

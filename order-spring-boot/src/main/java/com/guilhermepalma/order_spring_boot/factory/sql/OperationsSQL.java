@@ -1,9 +1,11 @@
-package com.guilhermepalma.order_spring_boot.factory;
+package com.guilhermepalma.order_spring_boot.factory.sql;
 
 import com.guilhermepalma.order_spring_boot.dto.OperationResultDTO;
 import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
+import com.guilhermepalma.order_spring_boot.factory.FindInterface;
+import com.guilhermepalma.order_spring_boot.factory.Operations;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ import java.util.stream.Collectors;
  * @param <R> Repository Class by JPA Repository
  */
 @Log4j2
-public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Operations<T, Q>{
+public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Operations<T, Q> {
     private final R repository;
 
     public OperationsSQL(R repository) {
