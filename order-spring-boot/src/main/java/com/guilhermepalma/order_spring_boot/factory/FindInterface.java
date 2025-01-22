@@ -6,11 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.tuple.Tuplizer;
 
-@Getter
-@AllArgsConstructor
 public abstract class FindInterface<Q> {
-    private Q query;
-
-    public abstract OperationResultDTO<?> executeQuery(Q queryParameters);
+    public abstract Q getQuery();
+    public abstract OperationResultDTO<?> executeQuery();
 
 }

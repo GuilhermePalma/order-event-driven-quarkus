@@ -177,7 +177,7 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
     @Override
     public OperationResultDTO<?> findMany(FindInterface<Q> command) {
         try {
-            return command.executeQuery(command.getQuery());
+            return command.executeQuery();
         } catch (Exception ex) {
             return new OperationResultDTO<>(ex);
         } finally {

@@ -72,11 +72,18 @@ public class OrderQueryHandler extends OperationsSQL<Order, FindOrderByParameter
     }
 
     private FindInterface<FindOrderByParametersCommand> getOverrideFind(FindInterface<FindOrderByParametersCommand> command) {
-        Pageable page = PageRequest.of(command.getQuery().getPageNumber(), command.getQuery().getPageSize(), Sort.by("id").ascending());
+        FindOrderByParametersCommand query = command.getQuery();
+        Pageable page = PageRequest.of(query.getPageNumber(), query.getPageSize(), Sort.by("id").ascending());
 
-        return new FindInterface<>(command.getQuery()) {
+        return new FindInterface<>() {
             @Override
-            public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
+            public FindOrderByParametersCommand getQuery() {
+                return query;
+            }
+
+            @Override
+            public OperationResultDTO<?> executeQuery() {
+                FindOrderByParametersCommand queryParameters = getQuery();
                 final boolean isDeleted = !Objects.isNull(queryParameters.getIsDeleted()) && queryParameters.getIsDeleted();
 
                 if (!Util.isEmptyOrNull(queryParameters.getId())) {

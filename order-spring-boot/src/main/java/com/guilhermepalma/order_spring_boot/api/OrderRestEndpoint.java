@@ -73,9 +73,14 @@ public class OrderRestEndpoint {
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
-        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>(find) {
+        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>() {
             @Override
-            public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
+            public FindOrderByParametersCommand getQuery() {
+                return find;
+            }
+
+            @Override
+            public OperationResultDTO<?> executeQuery() {
                 return null;
             }
         }), HttpStatus.OK);
@@ -100,9 +105,14 @@ public class OrderRestEndpoint {
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
-        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>(find) {
+        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>() {
             @Override
-            public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
+            public FindOrderByParametersCommand getQuery() {
+                return find;
+            }
+
+            @Override
+            public OperationResultDTO<?> executeQuery() {
                 return null;
             }
         }), HttpStatus.OK);
