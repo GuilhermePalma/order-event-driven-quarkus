@@ -79,7 +79,7 @@ public class OrderRestEndpoint {
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
-        return new ResponseEntity<>(orderQueryHandler.findOne(new FindInterface<>(find) {
+        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>(find) {
             @Override
             public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
                 return null;
@@ -112,7 +112,7 @@ public class OrderRestEndpoint {
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
-        return new ResponseEntity<>(orderQueryHandler.findOne(new FindInterface<>(find) {
+        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>(find) {
             @Override
             public OperationResultDTO<?> executeQuery(FindOrderByParametersCommand queryParameters) {
                 return null;
