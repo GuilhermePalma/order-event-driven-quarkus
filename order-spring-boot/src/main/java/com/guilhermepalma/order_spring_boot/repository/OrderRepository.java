@@ -23,4 +23,5 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Page<Order> findAllByIsDeletedIsAndCustomerNameIn(boolean isDeleted, Collection<String> customerName, Pageable pageable);
     Page<Order> findAllByIsDeletedIsAndProductIn(boolean isDeleted, Collection<String> product, Pageable pageable);
     Page<Order> findAllByIsDeletedIsAndStatusIn(boolean isDeleted, Collection<StatusType> status, Pageable pageable);
+    Page<Order> findAllByIsDeletedIs(boolean isDeleted, Pageable pageable);
 }

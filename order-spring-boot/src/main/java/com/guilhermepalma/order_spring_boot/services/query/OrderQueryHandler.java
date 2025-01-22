@@ -111,6 +111,8 @@ public class OrderQueryHandler extends OperationsSQL<Order, FindOrderByParameter
                     pageReturned = repository.findAllByIsDeletedIsAndCustomerNameIn(isDeleted, customerName, page);
                 } else if (!Util.isEmptyOrNull(type)) {
                     pageReturned = repository.findAllByIsDeletedIsAndStatusIn(isDeleted, type, page);
+                } else if (!Objects.isNull(queryParameters.getIsDeleted())) {
+                    pageReturned = repository.findAllByIsDeletedIs(isDeleted, page);
                 } else {
                     pageReturned = repository.findAll(page);
                 }
