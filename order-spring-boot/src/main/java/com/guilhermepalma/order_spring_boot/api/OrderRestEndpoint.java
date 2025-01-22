@@ -17,11 +17,13 @@ import com.guilhermepalma.order_spring_boot.type.StatusType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,17 @@ public class OrderRestEndpoint {
         this.producer = producer;
     }
 
-    @Operation(summary = "Create Orders values", description = "Used only for Register new Items")
+    @Operation(summary = "Create Orders values", description = "Used only for Register new Items",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    examples = {
+                            @ExampleObject(name = "Insert Example - 01", description = "Create Value on Database", value = StaticJson.EXAMPLE_1_REGISTER_ORDER),
+                            @ExampleObject(name = "Insert Example - 02", description = "Create Value on Database", value = StaticJson.EXAMPLE_2_REGISTER_ORDER),
+                            @ExampleObject(name = "Insert Example - 03", description = "Create Value on Database", value = StaticJson.EXAMPLE_3_REGISTER_ORDER),
+                            @ExampleObject(name = "Insert Example - 04", description = "Create Value on Database", value = StaticJson.EXAMPLE_4_REGISTER_ORDER)
+                    }
+            ))
+    )
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Orders Created", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationResultDTO.class))))
     @PostMapping(value = "api/v1/order", produces = "application/json", consumes = "application/json")
@@ -49,7 +61,17 @@ public class OrderRestEndpoint {
         return new ResponseEntity<>(producer.createMany(command), HttpStatus.OK);
     }
 
-    @Operation(summary = "Update Orders values", description = "Used only for Update Items")
+    @Operation(summary = "Update Orders values", description = "Used only for Update Items. WARMING: It's necessary there is ID on Items (Exemples isn't).  Recommendation: Copy Values of GET API and Change Parameters",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    examples = {
+                            @ExampleObject(name = "Update Example - 01", description = "Update Value on Database (If there is ID)", value = StaticJson.EXAMPLE_1_REGISTER_ORDER),
+                            @ExampleObject(name = "Update Example - 02", description = "Update Value on Database (If there is ID)", value = StaticJson.EXAMPLE_2_REGISTER_ORDER),
+                            @ExampleObject(name = "Update Example - 03", description = "Update Value on Database (If there is ID)", value = StaticJson.EXAMPLE_3_REGISTER_ORDER),
+                            @ExampleObject(name = "Update Example - 04", description = "Update Value on Database (If there is ID)", value = StaticJson.EXAMPLE_4_REGISTER_ORDER)
+                    }
+            ))
+    )
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "Orders Updated", content = @Content(
             mediaType = "application/json", schema = @Schema(implementation = OperationResultDTO.class))))
     @PutMapping(value = "api/v1/order", produces = "application/json", consumes = "application/json")
