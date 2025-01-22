@@ -1,10 +1,14 @@
 package com.guilhermepalma.order_spring_boot.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class PayloadDTO<T> {
     private List<T> data;
 
