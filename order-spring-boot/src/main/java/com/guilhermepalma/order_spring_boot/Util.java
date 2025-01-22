@@ -7,7 +7,11 @@ import java.util.stream.Collectors;
 public class Util {
 
     public static <T> boolean isEmptyOrNull(Collection<T> data) {
-        return Objects.isNull(data) || data.isEmpty();
+        if (Objects.isNull(data) || data.isEmpty()) {
+            return true;
+        } else {
+            return data.stream().filter(item -> !Objects.isNull(item)).findAny().isEmpty();
+        }
     }
     public static <T> boolean isEmptyOrNull(String data) {
         return Objects.isNull(data) || data.isEmpty();
