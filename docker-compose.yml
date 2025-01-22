@@ -25,7 +25,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: guilherme_user@localhost.com
       PGADMIN_DEFAULT_PASSWORD: "0biy0]Q99y2?"
     ports:
-      - 8080:80
+      - 8082:80
     volumes:
       - ./data/pgadmin:/var/lib/pgadmin
 
@@ -53,6 +53,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   # Kafka UI Visualizer
   kafdrop:
