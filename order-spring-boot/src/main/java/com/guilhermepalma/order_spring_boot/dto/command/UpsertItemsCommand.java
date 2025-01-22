@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Setter
 public class UpsertItemsCommand<T> {
     private PayloadDTO<T> payload;
     private String identifier;
