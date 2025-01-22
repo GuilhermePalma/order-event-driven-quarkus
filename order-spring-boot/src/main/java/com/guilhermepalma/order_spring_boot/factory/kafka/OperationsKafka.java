@@ -78,7 +78,7 @@ public class OperationsKafka<T, Void> implements Operations<T, Void> {
             Set<String> metadata = Collections.synchronizedSet(new HashSet<>());
             Set<String> errors = Collections.synchronizedSet(new HashSet<>());
             data.forEach(item -> {
-                SendResult<String, T> kafkaResponse = null;
+                SendResult<String, T> kafkaResponse;
                 try {
                     kafkaResponse = producer.send(command.getIdentifier(), Util.generateIdentifierId(), item)
                             .get(getTimeout(), TimeUnit.SECONDS);
@@ -86,8 +86,10 @@ public class OperationsKafka<T, Void> implements Operations<T, Void> {
                     throw new RuntimeException(e);
                 }
 
-                metadata.add(kafkaResponse.getRecordMetadata().toString());
-                metadata.add(kafkaResponse.getProducerRecord().toString());
+                if (!Objects.isNull(kafkaResponse)) {
+                    metadata.add(kafkaResponse.getRecordMetadata().toString());
+                    metadata.add(kafkaResponse.getProducerRecord().toString());
+                }
             });
             result.setErrors(String.join("\n", errors));
             result.setTotalErrors((long) errors.size());
