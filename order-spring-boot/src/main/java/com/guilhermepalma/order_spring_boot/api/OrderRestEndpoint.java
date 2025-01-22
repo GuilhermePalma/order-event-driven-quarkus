@@ -13,7 +13,6 @@ import com.guilhermepalma.order_spring_boot.type.StatusType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -61,7 +60,7 @@ public class OrderRestEndpoint {
     @GetMapping(value = "api/v1/order", produces = "application/json")
     public ResponseEntity<OperationResultDTO<?>> getOrderManyParameters(
             @RequestParam(required = false) Set<String> id,
-            @Parameter(description = "Name of Product that will be searched", name = "product") @RequestParam(required = false) Set<String> name,
+            @Parameter(description = "Name of Product that will be searched", name = "product") @RequestParam(required = false) Set<String> product,
             @Parameter(description = "Name of Customer Responsible for the Product", name = "customerName") @RequestParam(required = false) Set<String> customerName,
             @Parameter(description = "Status of orders that will be searched", name = "status") @RequestParam(required = false) Set<StatusType> status,
             @Parameter(description = "Number of Page", name = "pageNumber") @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -69,7 +68,7 @@ public class OrderRestEndpoint {
             @RequestParam(required = false) boolean isDeleted
     ) {
         final FindOrderByParametersCommand find = FindOrderByParametersCommand.builder().isDeleted(isDeleted)
-                .id(Util.convertStringToUUID((id))).type(status).name(name).customerName(customerName)
+                .id(Util.convertStringToUUID((id))).type(status).name(product).customerName(customerName)
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
@@ -92,7 +91,7 @@ public class OrderRestEndpoint {
     @GetMapping(value = "api/v1/order/simple", produces = "application/json")
     public ResponseEntity<OperationResultDTO<?>> getOrder(
             @RequestParam(required = false) String id,
-            @Parameter(description = "Name of Product that will be searched", name = "product") @RequestParam(required = false) String name,
+            @Parameter(description = "Name of Product that will be searched", name = "product") @RequestParam(required = false) String product,
             @Parameter(description = "Name of Customer Responsible for the Product", name = "customerName") @RequestParam(required = false) String customerName,
             @Parameter(description = "Status of orders that will be searched", name = "status") @RequestParam(required = false) StatusType status,
             @Parameter(description = "Number of Page", name = "pageNumber") @RequestParam(required = false, defaultValue = "0") int pageNumber,
@@ -101,7 +100,7 @@ public class OrderRestEndpoint {
     ) {
         final FindOrderByParametersCommand find = FindOrderByParametersCommand.builder().isDeleted(isDeleted)
                 .id(Collections.singleton(Util.convertStringToUUID((id)))).type(Collections.singleton(status))
-                .name(Collections.singleton(name)).customerName(Collections.singleton(customerName))
+                .name(Collections.singleton(product)).customerName(Collections.singleton(customerName))
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
