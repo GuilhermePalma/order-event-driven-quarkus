@@ -63,13 +63,7 @@ public class OrderRestEndpoint {
             @RequestParam(required = false) Set<String> id,
             @Parameter(description = "Name of Product that will be searched", name = "product") @RequestParam(required = false) Set<String> name,
             @Parameter(description = "Name of Customer Responsible for the Product", name = "customerName") @RequestParam(required = false) Set<String> customerName,
-            @Parameter(description = "Status of orders that will be searched", name = "status",
-                    schema = @Schema(implementation = StatusType.class), examples = {
-                    @ExampleObject(name = "PENDING", value = "PENDING"),
-                    @ExampleObject(name = "CONFIRMED", value = "CONFIRMED"),
-                    @ExampleObject(name = "SHIPPED", value = "SHIPPED"),
-                    @ExampleObject(name = "DELIVERED", value = "DELIVERED"),
-            }) @RequestParam Set<StatusType> status,
+            @Parameter(description = "Status of orders that will be searched", name = "status") @RequestParam(required = false) Set<StatusType> status,
             @Parameter(description = "Number of Page", name = "pageNumber") @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @Parameter(description = "Items Number per Page", name = "pageSize") @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false) boolean isDeleted
@@ -95,13 +89,7 @@ public class OrderRestEndpoint {
             @RequestParam(required = false) String id,
             @Parameter(description = "Name of Product that will be searched", name = "product") @RequestParam(required = false) String name,
             @Parameter(description = "Name of Customer Responsible for the Product", name = "customerName") @RequestParam(required = false) String customerName,
-            @Parameter(description = "Status of orders that will be searched", name = "status",
-                    schema = @Schema(implementation = StatusType.class), examples = {
-                    @ExampleObject(name = "PENDING", value = "PENDING"),
-                    @ExampleObject(name = "CONFIRMED", value = "CONFIRMED"),
-                    @ExampleObject(name = "SHIPPED", value = "SHIPPED"),
-                    @ExampleObject(name = "DELIVERED", value = "DELIVERED"),
-            }) @RequestParam StatusType status,
+            @Parameter(description = "Status of orders that will be searched", name = "status") @RequestParam(required = false) StatusType status,
             @Parameter(description = "Number of Page", name = "pageNumber") @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @Parameter(description = "Items Number per Page", name = "pageSize") @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false) boolean isDeleted
