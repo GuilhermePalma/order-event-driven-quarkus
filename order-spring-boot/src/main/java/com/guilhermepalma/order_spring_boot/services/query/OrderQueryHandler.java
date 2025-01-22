@@ -27,6 +27,7 @@ public class OrderQueryHandler extends OperationsSQL<Order, FindOrderByParameter
     private final OrderRepository repository;
 
     public OrderQueryHandler(OrderRepository repository) {
+        super(repository);
         this.repository = repository;
     }
 

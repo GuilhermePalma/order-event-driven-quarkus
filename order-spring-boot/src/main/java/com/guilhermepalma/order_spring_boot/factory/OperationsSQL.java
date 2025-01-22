@@ -5,9 +5,12 @@ import com.guilhermepalma.order_spring_boot.dto.command.DeleteItemsCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.FindItemsByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,7 +22,11 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Operations<T, Q>{
-    private R repository;
+    private final R repository;
+
+    public OperationsSQL(R repository) {
+        this.repository = repository;
+    }
 
     @Override
     public OperationResultDTO<?> createOne(UpsertItemsCommand<T> command) {
@@ -57,17 +64,9 @@ public class OperationsSQL<T, Q, R extends JpaRepository<T, UUID>> implements Op
                 return new OperationResultDTO<>(new IllegalArgumentException("Empty Payload"));
             }
 
-            Set<String> errors = Collections.synchronizedSet(new HashSet<>());
-            List<T> validData = data.stream().map(item -> {
-                if (fetchDatabseItem(item).isPresent()) {
-                    errors.add(String.format("Item there is on Database. Item: [%s]", item.toString()));
-                    return null;
-                }
-                return item;
-            }).filter(item -> !Objects.isNull(item)).toList();
-
-            return new OperationResultDTO<>(repository.saveAll(validData), validData.size(), errors);
+            return new OperationResultDTO<>(repository.saveAll(data));
         } catch (Exception ex) {
+            log.error("exception", ex);
             return new OperationResultDTO<>(ex);
         } finally {
             log.info("Finished create many by SQL Operations...");

@@ -12,10 +12,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 @Slf4j
@@ -27,9 +27,9 @@ public class OrderEventProducer {
     @Value("${mykafka.timeout.waiting.response}")
     private String TIMEOUT_WAITING_RESPONSE;
     @Value("${mykafka.topics.order.insert}")
-    private String INSERT_ODER_MANY;
+    private String INSERT_ORDER;
     @Value("${mykafka.topics.order.update}")
-    private String UPDATE_ODER_MANY;
+    private String UPDATE_ORDER;
 
     public OperationResultDTO<?> insertOrder(UpsertItemsCommand<Order> event) {
         log.info("OrderEventProducer start insertOrder");
@@ -38,11 +38,23 @@ public class OrderEventProducer {
                 return new OperationResultDTO<>(new IllegalArgumentException("Empty Payload"));
             }
 
-            SendResult<String, Object> result = kafkaTemplate.send(INSERT_ODER_MANY, Util.generateIdentifierId(), event)
-                    .get(getTimeout(), TimeUnit.SECONDS);
-
+            Set<String> metdata = Collections.synchronizedSet(new HashSet<>());
+            Set<Exception> errors = Collections.synchronizedSet(new HashSet<>());
             OperationResultDTO<PayloadDTO<Order>> data = new OperationResultDTO<>(event.getPayload());
-            data.setMetadata(new HashSet<>(Arrays.asList(result.getRecordMetadata().toString(), result.getProducerRecord().toString())));
+            event.getPayload().getData().forEach(item -> {
+                try {
+                    SendResult<String, Object> result = kafkaTemplate.send(INSERT_ORDER, Util.generateIdentifierId(), item)
+                            .get(getTimeout(), TimeUnit.SECONDS);
+                    metdata.add(result.getRecordMetadata().toString());
+                    metdata.add(result.getProducerRecord().toString());
+                } catch (Exception e) {
+                    log.error("exception to send kafka message", e);
+                    errors.add(e);
+                }
+            });
+            data.setMetadata(metdata);
+            data.setErrors(String.join("\n", errors.stream().map(Throwable::toString).toList()));
+            data.setTotalErrors((long) errors.size());
 
             return data;
         } catch (Exception ex) {
@@ -59,11 +71,23 @@ public class OrderEventProducer {
                 return new OperationResultDTO<>(new IllegalArgumentException("Empty Payload"));
             }
 
-            SendResult<String, Object> result = kafkaTemplate.send(UPDATE_ODER_MANY, Util.generateIdentifierId(), event)
-                    .get(getTimeout(), TimeUnit.SECONDS);
-
+            Set<String> metdata = Collections.synchronizedSet(new HashSet<>());
+            Set<Exception> errors = Collections.synchronizedSet(new HashSet<>());
             OperationResultDTO<PayloadDTO<Order>> data = new OperationResultDTO<>(event.getPayload());
-            data.setMetadata(new HashSet<>(Arrays.asList(result.getRecordMetadata().toString(), result.getProducerRecord().toString())));
+            event.getPayload().getData().forEach(item -> {
+                try {
+                    SendResult<String, Object> result = kafkaTemplate.send(UPDATE_ORDER, Util.generateIdentifierId(), item)
+                            .get(getTimeout(), TimeUnit.SECONDS);
+                    metdata.add(result.getRecordMetadata().toString());
+                    metdata.add(result.getProducerRecord().toString());
+                } catch (Exception e) {
+                    log.error("exception to send kafka message", e);
+                    errors.add(e);
+                }
+            });
+            data.setMetadata(metdata);
+            data.setErrors(String.join("\n", errors.stream().map(Throwable::toString).toList()));
+            data.setTotalErrors((long) errors.size());
 
             return data;
         } catch (Exception ex) {

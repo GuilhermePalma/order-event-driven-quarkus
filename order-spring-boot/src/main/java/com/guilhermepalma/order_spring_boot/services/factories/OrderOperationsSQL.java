@@ -9,4 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderOperationsSQL extends OperationsSQL<Order, FindOrderByParametersCommand, OrderRepository> {
 
+    public OrderOperationsSQL(OrderRepository repository) {
+        super(repository);
+    }
 }

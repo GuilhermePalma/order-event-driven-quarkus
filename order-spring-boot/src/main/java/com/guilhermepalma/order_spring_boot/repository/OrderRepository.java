@@ -5,9 +5,11 @@ import com.guilhermepalma.order_spring_boot.type.StatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
     Page<Order> findAllByIsDeletedIsAndIdIn(boolean isDeleted, Collection<UUID> id, Pageable pageable);
 
