@@ -6,7 +6,10 @@ import com.guilhermepalma.order_spring_boot.dto.PayloadDTO;
 import com.guilhermepalma.order_spring_boot.dto.command.FindOrderByParametersCommand;
 import com.guilhermepalma.order_spring_boot.dto.command.UpsertItemsCommand;
 import com.guilhermepalma.order_spring_boot.factory.FindInterface;
+import com.guilhermepalma.order_spring_boot.factory.OperationSQLFactory;
+import com.guilhermepalma.order_spring_boot.factory.Operations;
 import com.guilhermepalma.order_spring_boot.model.Order;
+import com.guilhermepalma.order_spring_boot.repository.OrderRepository;
 import com.guilhermepalma.order_spring_boot.services.producer.OrderEventProducer;
 import com.guilhermepalma.order_spring_boot.services.query.OrderQueryHandler;
 import com.guilhermepalma.order_spring_boot.type.StatusType;
@@ -28,12 +31,12 @@ import java.util.Set;
 @Tag(name = "Order", description = "Endpoint to manipulate and manage orders and their data")
 public class OrderRestEndpoint {
 
-    private final OrderEventProducer orderService;
-    private final OrderQueryHandler orderQueryHandler;
+    private final OrderEventProducer producer;
+    private final Operations<Order, FindOrderByParametersCommand> queryHandler;
 
-    public OrderRestEndpoint(OrderEventProducer orderService, OrderQueryHandler orderQueryHandler) {
-        this.orderService = orderService;
-        this.orderQueryHandler = orderQueryHandler;
+    public OrderRestEndpoint(OrderEventProducer producer, OperationSQLFactory<Order, FindOrderByParametersCommand, OrderRepository> query) {
+        this.producer = producer;
+        this.queryHandler = query.createOperations();
     }
 
     @Operation(summary = "Create Orders values", description = "Used only for Register new Items")
@@ -42,7 +45,7 @@ public class OrderRestEndpoint {
     @PostMapping(value = "api/v1/order", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationResultDTO<?>> insertOrder(@RequestBody PayloadDTO<Order> orderPayload) {
         UpsertItemsCommand<Order> command = UpsertItemsCommand.<Order>builder().payload(orderPayload).build();
-        return new ResponseEntity<>(orderService.insertOrder(command), HttpStatus.OK);
+        return new ResponseEntity<>(producer.insertOrder(command), HttpStatus.OK);
     }
 
     @Operation(summary = "Update Orders values", description = "Used only for Update Items")
@@ -51,7 +54,7 @@ public class OrderRestEndpoint {
     @PutMapping(value = "api/v1/order", produces = "application/json", consumes = "application/json")
     public ResponseEntity<OperationResultDTO<?>> updateOrder(@RequestBody PayloadDTO<Order> orderPayload) {
         UpsertItemsCommand<Order> command = UpsertItemsCommand.<Order>builder().payload(orderPayload).build();
-        return new ResponseEntity<>(orderService.updateOrder(command), HttpStatus.OK);
+        return new ResponseEntity<>(producer.updateOrder(command), HttpStatus.OK);
     }
 
     @Operation(summary = "Get database Order Values by Many Fields Values")
@@ -72,7 +75,7 @@ public class OrderRestEndpoint {
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
-        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>() {
+        return new ResponseEntity<>(queryHandler.findMany(new FindInterface<>() {
             @Override
             public FindOrderByParametersCommand getQuery() {
                 return find;
@@ -104,7 +107,7 @@ public class OrderRestEndpoint {
                 .pageNumber(pageNumber).pageSize(pageSize)
                 .build();
 
-        return new ResponseEntity<>(orderQueryHandler.findMany(new FindInterface<>() {
+        return new ResponseEntity<>(queryHandler.findMany(new FindInterface<>() {
             @Override
             public FindOrderByParametersCommand getQuery() {
                 return find;
