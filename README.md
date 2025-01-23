@@ -30,7 +30,6 @@
 
 Agora, todos os serviços estão disponiveis para realizar testes e validações
 
-- Caso queira executar os Testes, execute os comando do Passo 2, substituindo ``assemble`` por ``build``
 - [Interface Visual - API Spring Boot](http://localhost:8081/swagger-ui/index.html): Acesse ``http://localhost:8081/swagger-ui/index.html``
 - [Interface Visual - API Kafka](http://localhost:19000/): Acesse ``http://localhost:19000/``
 - [Interface Visual - API Postegre](http://localhost:8082/browser/): Acesse ``http://localhost:8082/browser/`` (Obs: Credenciais anexas no e-mail)
