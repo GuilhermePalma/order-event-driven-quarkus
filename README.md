@@ -6,11 +6,15 @@
     <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/GuilhermePalma/order-event-driven-quarkus?color=2304D361">
   </a>
 
-  <a href="https://github.com/GuilhermeCallegari/Maquiagem">
+  <a href="https://github.com/GuilhermePalma/order-event-driven-quarkus">
     <img alt="Repository size" src="https://img.shields.io/github/repo-size/GuilhermePalma/order-event-driven-quarkus">
   </a>
 
-  <a href="https://github.com/GuilhermeCallegari/Maquiagem/commits/main">
+  <a href="https://wakatime.com/badge/user/e9fe1d59-49e9-456e-8e0d-cefe5fda1770/project/2838a73d-d817-416a-b3d6-27eb0c2e3f73">
+      <img src="https://wakatime.com/badge/user/e9fe1d59-49e9-456e-8e0d-cefe5fda1770/project/2838a73d-d817-416a-b3d6-27eb0c2e3f73.svg" alt="wakatime">
+  </a>
+
+  <a href="https://github.com/GuilhermePalma/order-event-driven-quarkus/commits/main">
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/GuilhermePalma/order-event-driven-quarkus">
   </a>
 
