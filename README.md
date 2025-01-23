@@ -10,7 +10,7 @@
     <img alt="Repository size" src="https://img.shields.io/github/repo-size/GuilhermePalma/order-event-driven-quarkus">
   </a>
 
-  <a href="https://wakatime.com/badge/user/e9fe1d59-49e9-456e-8e0d-cefe5fda1770/project/2838a73d-d817-416a-b3d6-27eb0c2e3f73">
+  <a href="https://wakatime.com/@guilhermePalma/projects/vlyowpabot?start=2025-01-17&end=2025-01-23">
       <img src="https://wakatime.com/badge/user/e9fe1d59-49e9-456e-8e0d-cefe5fda1770/project/2838a73d-d817-416a-b3d6-27eb0c2e3f73.svg" alt="wakatime">
   </a>
 
