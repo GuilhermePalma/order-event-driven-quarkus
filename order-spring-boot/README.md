@@ -1,1 +1,0 @@
-- Spring Boot Initializer URL: https://start.spring.io/#!type=gradle-project&language=java&platformVersion=3.4.1&packaging=jar&jvmVersion=17&groupId=com.guilhermepalma&artifactId=order-spring-boot&name=order-spring-boot&description=Order%20Spring%20Boot%20Project&packageName=com.guilhermepalma.order-spring-boot&dependencies=lombok,devtools,web,data-jpa,kafka,mysql
